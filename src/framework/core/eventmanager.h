@@ -30,54 +30,61 @@
 #include <map>
 #include <set>
 
-/**
- * @class EventManager
- * @brief A basic concrete IEventManager.
- *
- * This class is <b>not</b> thread-safe. All events queued are garunteed to be executed
- * in the thread Tick() is invoked. For Async Event Managment, @see AsyncEventManager.
- *
- * @note This class is based off of the EventManager class form "Game Coding Complete: Third Edition" by Mike McShaffry.
- */
-class OG_API EventManager : public IEventManager, public Singleton< EventManager >
+namespace OGFramework
 {
-public:
-	EventManager( std::string name );
-	virtual ~EventManager( void );
+	namespace Core
+	{
+		/**
+		 * @class EventManager
+		 * @brief A basic concrete IEventManager.
+		 *
+		 * This class is <b>not</b> thread-safe. All events queued are garunteed to be executed
+		 * in the thread Tick() is invoked. For Async Event Managment, @see AsyncEventManager.
+		 *
+		 * @note This class is based off of the EventManager class form "Game Coding Complete: Third Edition" by Mike McShaffry.
+		 */
 
-	// OPERATIONS
-	//
-	void AbortEvent( const EventType inType, bool allOfType = false );
-	void AddListener( const EventHandler fnHandler, const EventType eventType );
-	void DeleteListener( const EventHandler fnHandler, const EventType eventType );
-	void QueueEvent( const IEventDataPtr& inEvent );
-	void Tick( void );
-	void Trigger( const IEventData& inEvent ) const;
-	bool TypeLegal( const EventType inType ) const;
-	bool ValidateType( const EventType inType ) const;
+		class OG_API EventManager : public OGFramework::Core::IEventManager, public OGFramework::Util::Singleton< OGFramework::Core::EventManager >
+		{
+		public:
+			EventManager( std::string name );
+			virtual ~EventManager( void );
 
-	// ACCESS
-	//
-	std::string GetName( void ) const { return mName; }
+			// OPERATIONS
+			//
+			void AbortEvent( const EventType inType, bool allOfType = false );
+			void AddListener( const EventHandler fnHandler, const EventType eventType );
+			void DeleteListener( const EventHandler fnHandler, const EventType eventType );
+			void QueueEvent( const IEventDataPtr& inEvent );
+			void Tick( void );
+			void Trigger( const IEventData& inEvent ) const;
+			bool TypeLegal( const EventType inType ) const;
+			bool ValidateType( const EventType inType ) const;
 
-protected:
-private:
+			// ACCESS
+			//
+			std::string GetName( void ) const { return mName; }
 
-	typedef std::list< EventHandler >							EventHandlerTable;
-	typedef std::map< unsigned long, EventHandlerTable >		EventHandlerMap;
-	typedef std::pair< unsigned long, EventHandlerTable >		EventHandlerMapEnt;
-	typedef std::list< IEventDataPtr >							EventQueue;
+		protected:
+		private:
 
-	//
-	// We need to double buffer the queuing of events,
-	// so events queued by events already queued, will
-	// be executed on the next Tick().
-	//
-	EventQueue				mEventQueues[2];
-	uint8					mActiveQueue;
-	EventHandlerMap			mEventHandlers;
+			typedef std::list< EventHandler >							EventHandlerTable;
+			typedef std::map< unsigned long, EventHandlerTable >		EventHandlerMap;
+			typedef std::pair< unsigned long, EventHandlerTable >		EventHandlerMapEnt;
+			typedef std::list< IEventDataPtr >							EventQueue;
 
-	std::string mName;
-};
+			//
+			// We need to double buffer the queuing of events,
+			// so events queued by events already queued, will
+			// be executed on the next Tick().
+			//
+			EventQueue				mEventQueues[2];
+			uint8					mActiveQueue;
+			EventHandlerMap			mEventHandlers;
+
+			std::string mName;
+		};
+	}
+}
 
 #endif

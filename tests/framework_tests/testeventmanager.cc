@@ -19,6 +19,9 @@
 #include "testevent.h"
 #include "testeventmanager.h"
 
+using namespace OGFramework::Core;
+using namespace OGFramework::Util;
+
 CPPUNIT_TEST_SUITE_REGISTRATION( TestEventManager );
 
 void

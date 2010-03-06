@@ -24,6 +24,9 @@
 //
 #include "eventmanager.h"
 
+using namespace OGFramework::Core;
+using namespace OGFramework::Util;
+
 template<>
 EventManager* Singleton<EventManager>::msSingleInstance = NULL;
 

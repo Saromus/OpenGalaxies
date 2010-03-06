@@ -18,7 +18,9 @@
 
 // PROJECT INCLUDES
 //
-#include "globalconsole.h"
+#include "testlogger.h"
+#include <framework/util/logger.h>
+#include <framework/util/globalconsole.h>
 
 // STL INCLUDES
 //
@@ -26,14 +28,35 @@
 
 using namespace OGFramework::Util;
 
-template<>
-GlobalConsole* Singleton< GlobalConsole >::msSingleInstance = new GlobalConsole();
+CPPUNIT_TEST_SUITE_REGISTRATION( TestLogger );
 
-GlobalConsole::GlobalConsole()
-: Log( std::cout )
+void 
+TestLogger::setUp( void )
 {
 }
 
-GlobalConsole::~GlobalConsole()
+void
+TestLogger::tearDown( void )
 {
+}
+
+void 
+TestLogger::LoggerTest( void )
+{
+	//std::cout < "\n" << std::endl; // new line so first DebugString() isn't on the same line as beginning ellipsis.
+	//sConsole.DebugString( "Opening Log File." );
+	Logger logger = /*new*/ Logger( "TestLogger.log" );
+	//sConsole.DebugString( "'TestLogger.log' successfully opened." );
+
+	//sConsole.DebugString( "Writing tests to Log" );
+
+	logger.Log( INFO, "Testing Info Level." );
+	logger.Log( DEBUG, "Testing Debug Level." );
+	logger.Log( WARNING, "Testing Warning Level." );
+	logger.Log( ERROR, "Testing Error Level." );
+	logger.Log( FATAL, "Testing Fatal Level." );
+
+	//sConsole.DebugString( "Finished logging. (delete logger)" );
+
+	//delete logger;
 }

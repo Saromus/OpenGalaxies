@@ -43,8 +43,8 @@ public:
 protected:
 
 private:
-	boost::shared_ptr< Process >		mRootProcess;
-	ProcessManager						mProcessManager;
+	boost::shared_ptr< OGFramework::Core::Process >		mRootProcess;
+	OGFramework::Core::ProcessManager					mProcessManager;
 };
 
 #endif

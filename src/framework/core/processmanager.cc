@@ -20,6 +20,8 @@
 //
 #include "processmanager.h"
 
+using namespace OGFramework::Core;
+
 ProcessManager::ProcessManager()
 {
 }
@@ -59,7 +61,7 @@ ProcessManager::Update(int deltaMilliseconds)
 	{
 		boost::shared_ptr< Process > pProcess(*i);
 
-		if( pProcess->IsDead() ) // Our process is dead-- get rid of it.
+		if( pProcess->IsDead() ) // Our process is dead -- get rid of it.
 		{
 			boost::shared_ptr< Process > pNext( pProcess->GetNext() );
 			if( pNext ) // We have a child process, attach it to the manager.

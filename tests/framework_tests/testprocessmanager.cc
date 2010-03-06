@@ -19,6 +19,8 @@
 #include "testprocessmanager.h"
 #include "testprocess.h"
 
+using namespace OGFramework::Core;
+
 CPPUNIT_TEST_SUITE_REGISTRATION( TestProcessManager );
 
 void

@@ -18,6 +18,8 @@
 
 #include "baseeventdata.h"
 
+using namespace OGFramework::Core;
+
 BaseEventData::BaseEventData( const float timeStamp )
 : mTimeStamp( timeStamp )
 {

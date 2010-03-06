@@ -23,7 +23,7 @@
 //
 #include <framework/core/process.h>
 
-class TestProcess : public Process
+class TestProcess : public OGFramework::Core::Process
 {
 public:
 	TestProcess( std::string name ) : mName(name) { }

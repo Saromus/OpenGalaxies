@@ -33,41 +33,47 @@
 //
 #include <list>
 
-/**
-* @classname ProcessManager
-* @brief A container and manager for Processes.
-*
-* Holds and maintains the updating of Processes. Once a process is considered to be dead, the ProcessManager
-* will clean it up accordingly.
-*
-* @note This class was based off of the CProcessManager class from "Game Coding Complete: Third Edition" by Mike McShaffry.
-* @see Process
-*/
-class OG_API ProcessManager
+namespace OGFramework
 {
-	typedef std::list< boost::shared_ptr<Process> > ProcessList;
-public:
-	ProcessManager( void );
-	virtual ~ProcessManager( void );
+	namespace Core
+	{
+		/**
+		 * @classname ProcessManager
+		 * @brief A container and manager for Processes.
+		 *
+		 * Holds and maintains the updating of Processes. Once a process is considered to be dead, the ProcessManager
+		 * will clean it up accordingly.
+		 *
+		 * @note This class was based off of the CProcessManager class from "Game Coding Complete: Third Edition" by Mike McShaffry.
+		 * @see Process
+		 */
+		class OG_API ProcessManager
+		{
+			typedef std::list< boost::shared_ptr<OGFramework::Core::Process> > ProcessList;
 
-	// OPERATIONS
-	//
-	void Attach( boost::shared_ptr<Process> pProcess );
-	void Update( int deltaMilliseconds );
+		public:
+			ProcessManager( void );
+			virtual ~ProcessManager( void );
 
-	// INQUIRES
-	//
-	bool HasProcesses()	{ return mProcesses.empty(); }
+			// OPERATIONS
+			//
+			void Attach( boost::shared_ptr<OGFramework::Core::Process> pProcess );
+			void Update( int deltaMilliseconds );
 
-protected:
-	ProcessList		mProcesses;
+			// INQUIRES
+			//
+			bool HasProcesses()	{ return mProcesses.empty(); }
 
-private:
+		protected:
+			ProcessList		mProcesses;
 
-	// OPERATIONS
-	//
-	void Detach( boost::shared_ptr<Process> pProcess );
+		private:
 
-};
+			// OPERATIONS
+			//
+			void Detach( boost::shared_ptr<OGFramework::Core::Process> pProcess );
+		};
+	}
+}
 
 #endif

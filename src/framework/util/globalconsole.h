@@ -22,18 +22,25 @@
 // PROJECT INCLUDES
 //
 #include <framework/util/bytebuffer.h>
-#include <framework/util/log.h>
+#include <framework/util/logger.h>
 #include <framework/util/ogdef.h>
 #include <framework/util/ogtypes.h>
 #include <framework/util/singleton.h>
 
-class OG_API GlobalConsole : public Log, public Singleton< GlobalConsole >
+namespace OGFramework
 {
-public:
-	GlobalConsole();
-	virtual ~GlobalConsole();
-};
+	namespace Util
+	{
+		class OG_API GlobalConsole : public OGFramework::Util::Log, public OGFramework::Util::Singleton< GlobalConsole >
+		{
+		public:
+			GlobalConsole();
+			virtual ~GlobalConsole();
+		};
 
 #define sConsole GlobalConsole::Instance()
+
+	}
+}
 
 #endif

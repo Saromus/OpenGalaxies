@@ -23,7 +23,7 @@
 //
 #include <framework/core/baseeventdata.h>
 
-class TestEvent : public BaseEventData
+class TestEvent : public OGFramework::Core::BaseEventData
 {
 public:
 	TestEvent( void )
@@ -49,14 +49,14 @@ public:
 	uint8 AllowZone;
 	uint8 AllowUnlimitedCharacterCreation;
 
-	void Serialize( ByteBuffer& archv ) const
+	void Serialize( OGFramework::Util::ByteBuffer& archv ) const
 	{
 		archv << AllowZone;
 		archv << AllowCharacterCreation;
 		archv << AllowUnlimitedCharacterCreation;
 	}
 
-	void Deserialize( ByteBuffer& archv ) const
+	void Deserialize( OGFramework::Util::ByteBuffer& archv ) const
 	{
 		archv >> AllowZone;
 		archv >> AllowCharacterCreation;

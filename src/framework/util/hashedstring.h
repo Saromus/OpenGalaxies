@@ -28,46 +28,51 @@
 //
 #include <string>
 
-/**
-* @classname HashedString
-* @brief A string hashing container.
-*
-* String hashing envolves taking a ASCII string and performing calculations on it,
-* which outputs an integer "hash" or "crc" value.
-*
-* Using hashed strings for string comparing can in most cases boost performance within a program, because
-* there is no character-by-character comparing, but rather one calculation which compares each integer with
-* eachother.
-*/
-class OG_API HashedString
+namespace OGFramework
 {
-public:
-	HashedString( void );
-	HashedString( std::string input );
-	virtual ~HashedString();
+	namespace Util
+	{
+		/**
+		 * @classname HashedString
+		 * @brief A string hashing container.
+		 *
+		 * String hashing envolves taking a ASCII string and performing calculations on it,
+		 * which outputs an integer "hash" or "crc" value.
+		 *
+		 * Using hashed strings for string comparing can in most cases boost performance within a program, because
+		 * there is no character-by-character comparing, but rather one calculation which compares each integer with
+		 * eachother.
+		 */
+		class OG_API HashedString
+		{
+		public:
+			HashedString( void );
+			HashedString( std::string input );
+			virtual ~HashedString();
 
-	// OPERATIONS
-	//
-	virtual void* HashString( const std::string input );
+			// OPERATIONS
+			//
+			virtual void* HashString( const std::string input );
 
-	// OPERATORS
-	//
-	bool operator == ( const HashedString& other );
-	bool operator < ( const HashedString& other );
+			// OPERATORS
+			//
+			bool operator == ( const HashedString& other );
+			bool operator < ( const HashedString& other );
 
-	// ACCESS
-	//
-	unsigned long GetHashValue() const			{ return reinterpret_cast<unsigned long>(mHashValue); }
-	std::string GetString() const				{ return mString; }
+			// ACCESS
+			//
+			unsigned long GetHashValue() const			{ return reinterpret_cast<unsigned long>(mHashValue); }
+			std::string GetString() const				{ return mString; }
 
-protected:
+		protected:
 
-private:
-	std::string		mString;
-	void*			mHashValue; // Stored as a void* instead of a uint32, so
-							// the value will show up in the debugger as
-							// a hex-value.
-
-};
+		private:
+			std::string		mString;
+			void*			mHashValue; // Stored as a void* instead of a uint32, so
+										// the value will show up in the debugger as
+										// a hex-value.
+			};
+	}
+}
 
 #endif

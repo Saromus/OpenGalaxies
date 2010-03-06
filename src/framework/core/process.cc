@@ -20,6 +20,8 @@
 //
 #include "process.h"
 
+using namespace OGFramework::Core;
+
 Process::Process()
 : mKill( false ), mIsAttached( false ), mIsInitialized( false ), mIsPaused( false )
 {

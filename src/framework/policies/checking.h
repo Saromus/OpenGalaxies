@@ -23,34 +23,41 @@
 //
 #include <exception>
 
-/**
- * @brief A Stub Checking Policy.
- */
-template< class T >
-struct NoChecking
+namespace OGFramework
 {
-	static inline void Check( T* ptr ) { }
-};
-
-/**
- * @brief A Checking Policy that will throw an exception on a Null pointer.
- * @throws EnforceNotNull::NullPointerException
- */
-template< class T >
-struct EnforceNotNull
-{
-	class NullPointerException : public std::exception
+	namespace Policies
 	{
-	public:
-		NullPointerException( void ) { }
-		~NullPointerException( void ) { }
-	};
+		/**
+		 * @brief A Stub Checking Policy.
+		 */
+		template< class T >
+		struct NoChecking
+		{
+			static inline void Check( T* ptr ) { }
+		};
 
-	static inline void Check( T* ptr )
-	{
-		if(!ptr)
-			throw NullPointerException();
+		template< class T >
+		struct EnforceNotNull
+		{
+			/**
+			 * @class NullPointerException
+			 * @brief A Checking Policy that will throw an exception on a Null pointer.
+			 * @throws EnforceNotNull::NullPointerException
+			 */
+			class NullPointerException : public std::exception
+			{
+			public:
+				NullPointerException( void ) throw() { }
+				~NullPointerException( void ) throw() { }
+			};
+
+			static inline void Check( T* ptr )
+			{
+				if(!ptr)
+					throw NullPointerException();
+			}
+		};
 	}
-};
+}
 
 #endif

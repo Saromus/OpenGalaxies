@@ -37,33 +37,39 @@
 //
 // Types
 //
-typedef HashedString EventType;
+typedef OGFramework::Util::HashedString EventType;
 
-/**
- * @class IEventData
- * @brief A interface used to construct events for the EventManager.
- *
- * @note This class is based off of the IEventData class form "Game Coding Complete: Third Edition" by Mike McShaffry.
- */
-class OG_API IEventData : public ISerializable
+namespace OGFramework
 {
-public:
-	IEventData() { }
-	IEventData( std::istream &in ) { }
-	virtual ~IEventData() { }
+	namespace Core
+	{
+		/**
+		 * @class IEventData
+		 * @brief A interface used to construct events for the EventManager.
+		 *
+		 * @note This class is based off of the IEventData class form "Game Coding Complete: Third Edition" by Mike McShaffry.
+		 */
+		class OG_API IEventData : public OGFramework::Util::ISerializable
+		{
+		public:
+			IEventData() { }
+			IEventData( std::istream &in ) { }
+			virtual ~IEventData() { }
 	
-	// OPERATIONS
-	//
-	virtual bool Validate( void ) { return true; }
-	virtual void Serialize( ByteBuffer& archv ) const { }
-	virtual void Deserialize( ByteBuffer& archv ) const { }
+			// OPERATIONS
+			//
+			virtual bool Validate( void ) { return true; }
+			virtual void Serialize( OGFramework::Util::ByteBuffer& archv ) const { }
+			virtual void Deserialize( OGFramework::Util::ByteBuffer& archv ) const { }
 
-	// ACCESS
-	//
-	virtual const EventType& GetEventType( void ) const = 0;
-	virtual float GetTimeStamp() const = 0;
-};
+			// ACCESS
+			//
+			virtual const EventType& GetEventType( void ) const = 0;
+			virtual float GetTimeStamp() const = 0;
+		};
+	}
+}
 
-typedef boost::shared_ptr<IEventData> IEventDataPtr;
+typedef boost::shared_ptr<OGFramework::Core::IEventData> IEventDataPtr;
 
 #endif

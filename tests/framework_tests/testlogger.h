@@ -16,39 +16,39 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// PROJECT INCLUDES
+#ifndef TESTLOGGER_H_
+#define TESTLOGGER_H_
+
+// CPPUNIT INCLUDES
 //
-#include "log.h"
+#include <cppunit/extensions/HelperMacros.h>
+
+// PROJECT INCLUDES
+#include <framework/util/logger.h>
 
 // STL INCLUDES
-//
+#include <iostream>
+#include <fstream>
 #include <string>
 
-Log::Log( std::ostream &outputStream )
-: mLogStream( outputStream )
+class TestLogger : public CppUnit::TestFixture
 {
-}
+	CPPUNIT_TEST_SUITE( TestLogger );
+	CPPUNIT_TEST( LoggerTest );
+	CPPUNIT_TEST_SUITE_END();
 
-Log::~Log()
-{
-}
+public:
+	TestLogger( void ) { }
+	~TestLogger( void ) { }
 
-void Log::DebugString( std::string message )
-{
-	Lock(*this);
-#ifdef _DEBUG
-	mLogStream << "[Debug]: " << message << std::endl;
+	void setUp( void );
+	void tearDown( void );
+
+	void LoggerTest( void );
+	
+protected:
+private:
+
+};
+
 #endif
-}
-
-void Log::Warning( std::string message )
-{
-	Lock(*this);
-	mLogStream << "[Warning]: " << message << std::endl;
-}
-
-void Log::Fatal( std::string message )
-{
-	Lock(*this);
-	mLogStream << "[Fatal]: " << message << std::endl;
-}

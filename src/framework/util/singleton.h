@@ -27,53 +27,62 @@
 //
 #include <assert.h>
 
-/**
- * @class Singleton
- * @brief A template class used to create single-instance global classes.
- */
-template<
-	class T,
-    class CheckingPolicy = EnforceNotNull< T >
->
-class Singleton
+namespace OGFramework
 {
-public:
-	Singleton() { if(!msSingleInstance) msSingleInstance = static_cast< T* >( this ); }
-	virtual ~Singleton() { msSingleInstance = 0; }
-
-	// ACCESS
-	//
-	static T& Instance( void )
+	namespace Util
 	{
-        try
-        {
-            CheckingPolicy::Check( msSingleInstance );
-        }
-        catch( typename EnforceNotNull<T>::NullPointerException& e )
-        {
-            assert( 0 && "Singleton: is null!" );
-        }
+		template<
+		class T,
+		class CheckingPolicy = OGFramework::Policies::EnforceNotNull< T >
+		>
 
-		return *msSingleInstance;
+		/**
+		 * @class Singleton
+		 * @brief A template class used to create single-instance global classes.
+		 */
+
+		class Singleton
+		{
+		public:
+			Singleton() { if(!msSingleInstance) msSingleInstance = static_cast< T* >( this ); }
+			virtual ~Singleton() { msSingleInstance = 0; }
+
+			// ACCESS
+			//
+			static T& Instance( void )
+			{
+				try
+				{
+					CheckingPolicy::Check( msSingleInstance );
+				}
+				catch( typename OGFramework::Policies::EnforceNotNull<T>::NullPointerException& e )
+				{
+					assert( 0 && "Singleton: is null!" );
+				}
+
+				return *msSingleInstance;
+			}
+
+			static T* InstancePtr( void )
+			{
+				try
+				{
+					CheckingPolicy::Check( msSingleInstance );
+				}
+				catch( typename OGFramework::Policies::EnforceNotNull<T>::NullPointerException& e )
+				{
+					assert( 0 && "Singleton: is null!" );
+				}
+
+				return msSingleInstance;
+			}
+
+		protected:
+
+		private:
+			static T*			msSingleInstance;
+		};
 	}
-
-	static T* InstancePtr( void )
-	{
-        try
-        {
-            CheckingPolicy::Check( msSingleInstance );
-        }
-        catch( typename EnforceNotNull<T>::NullPointerException& e )
-        {
-            assert( 0 && "Singleton: is null!" );
-        }
-
-		return msSingleInstance;
-	}
-
-protected:
-private:
-	static T*			msSingleInstance;
-};
+}
 
 #endif

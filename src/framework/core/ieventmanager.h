@@ -36,82 +36,87 @@
 
 // TYPEDEF
 //
-typedef boost::function< void ( const IEventData& ) > EventHandler;
+typedef boost::function< void ( const OGFramework::Core::IEventData& ) > EventHandler;
 
-/**
- * @class IEventManager
- * @brief An EventManager interface.
- *
- * @note This class is based off of the IEventManager class form "Game Coding Complete: Third Edition" by Mike McShaffry.
- */
-class OG_API IEventManager
+namespace OGFramework
 {
-public:
-	IEventManager( std::string name ) {  }
-	virtual ~IEventManager( void ) { }
+	namespace Core
+	{
+		/**
+		 * @class IEventManager
+		 * @brief An EventManager interface.
+		 *
+		 * @note This class is based off of the IEventManager class form "Game Coding Complete: Third Edition" by Mike McShaffry.
+		 */
+		class OG_API IEventManager
+		{
+		public:
+			IEventManager( std::string name ) {  }
+			virtual ~IEventManager( void ) { }
 
-	// OPERATIONS
-	//
+			// OPERATIONS
+			//
 
-	/**
-	 * Causes the event manager to dequeue an event by type. If allOfType is set to true, the event manager should
-	 * remove all of the events matching the inType.
-	 * @param EventType[in] - The type of event we wish to remove.
-	 * @param bool[in] - Remove all events of this type?
-	 */
-	virtual void AbortEvent( const EventType inType, bool allOfType = false ) = 0;
+			/**
+			 * Causes the event manager to dequeue an event by type. If allOfType is set to true, the event manager should
+			 * remove all of the events matching the inType.
+			 * @param EventType[in] - The type of event we wish to remove.
+			 * @param bool[in] - Remove all events of this type?
+			 */
+			virtual void AbortEvent( const EventType inType, bool allOfType = false ) = 0;
 
-	/**
-	 * Adds a listener to the manager. When a event is triggered, listeners will
-	 * be informed if the event corresponds with an event the listener is listening for.
-	 * @param EventHandler[in] - The function that will be called to handle the event.
-	 * @param EventType[in] - The event type we wish the listener to be informed about.
-	 */
-	virtual void AddListener( const EventHandler fnHandler, const EventType eventType ) = 0;
+			/**
+			 * Adds a listener to the manager. When a event is triggered, listeners will
+			 * be informed if the event corresponds with an event the listener is listening for.
+			 * @param EventHandler[in] - The function that will be called to handle the event.
+			 * @param EventType[in] - The event type we wish the listener to be informed about.
+			 */
+			virtual void AddListener( const EventHandler fnHandler, const EventType eventType ) = 0;
 
-	/**
-	 * Tells the manager to stop informing the target listener about a specific EventType.
-	 * @param EventHandler[in] - The function/object which should stop listening for the EventType.
-	 * @param EventType[in] - The type of event we wish to no be informed about anymore.
-	 */
-	virtual void DeleteListener( const EventHandler fnHandler, const EventType eventType ) = 0;
+			/**
+			 * Tells the manager to stop informing the target listener about a specific EventType.
+			 * @param EventHandler[in] - The function/object which should stop listening for the EventType.
+			 * @param EventType[in] - The type of event we wish to no be informed about anymore.
+			 */
+			virtual void DeleteListener( const EventHandler fnHandler, const EventType eventType ) = 0;
 
-	/**
-	 * Adds an event to the Event Queue, that will be triggered on the next Tick(). If you wish
-	 * to trigger an event sychronously, see Trigger().
-	 * @param IEventDataPtr[in] - The event and its data.
-	 */
-	virtual void QueueEvent( const IEventDataPtr& inEvent ) = 0;
+			/**
+			 * Adds an event to the Event Queue, that will be triggered on the next Tick(). If you wish
+			 * to trigger an event sychronously, see Trigger().
+			 * @param IEventDataPtr[in] - The event and its data.
+			 */
+			virtual void QueueEvent( const IEventDataPtr& inEvent ) = 0;
 
-	/**
-	 * Triggers all events in-queue. Optionally, you can limit the amount of CPU time (in milliseconds)
-	 * this functions uses by using maxMillisec.
-	 * @param maxMillisec[in] - The amount of milliseconds the function should be triggering events in-queue.
-	 */
-	virtual void Tick( void ) = 0;
+			/**
+			 * Triggers all events in-queue. Optionally, you can limit the amount of CPU time (in milliseconds)
+			 * this functions uses by using maxMillisec.
+			 * @param maxMillisec[in] - The amount of milliseconds the function should be triggering events in-queue.
+			 */
+			virtual void Tick( void ) = 0;
 
-	/**
-	 * Triggers an event immediately, without waiting for
-	 * the next Tick().
-	 * @param IEventData[in] - The event and its data.
-	 */
-	virtual void Trigger( const IEventData& inEvent ) const = 0;
+			/**
+			 * Triggers an event immediately, without waiting for
+			 * the next Tick().
+			 * @param IEventData[in] - The event and its data.
+			 */
+			virtual void Trigger( const OGFramework::Core::IEventData& inEvent ) const = 0;
 
-	/**
-	 * Validates that an EventType is being listened for. This <b>will not</b> add
-	 * the EventType to the list of types being listened for.
-	 * @param EventType[in] - The event type to search for.
-	 */
-	virtual bool ValidateType( const EventType inType ) const = 0;
+			/**
+			 * Validates that an EventType is being listened for. This <b>will not</b> add
+			 * the EventType to the list of types being listened for.
+			 * @param EventType[in] - The event type to search for.
+			 */
+			virtual bool ValidateType( const EventType inType ) const = 0;
 
 
-	/**
-	 * Varifies that a type is legally able to be listened for by
-	 * the Event Manager.
-	 * @param EventType[in] - The event type to check.
-	 */
-	virtual bool TypeLegal( const EventType inType ) const = 0;
-};
-
+			/**
+			 * Varifies that a type is legally able to be listened for by
+			 * the Event Manager.
+			 * @param EventType[in] - The event type to check.
+			 */
+			virtual bool TypeLegal( const EventType inType ) const = 0;
+		};
+	}
+}
 
 #endif

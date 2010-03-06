@@ -25,28 +25,34 @@
 #include <framework/util/ogdef.h>
 #include <framework/util/ogtypes.h>
 
-/**
- * @class BaseEventData
- * @brief A basic implementation of the IEventData interface.
- *
- * This class is a basic <b>non-concrete</b> implementation of the IEvenData interface.
- * Any game events you wish to create, can inheirt from this class and implement the pure virtual
- * functions to create a concrete implementation that can be used with the EventManager.
- *
- * @note This class is based off of the BaseEventData class form "Game Coding Complete: Third Edition" by Mike McShaffry.
- */
-class OG_API BaseEventData : public IEventData
+namespace OGFramework
 {
-public:
-	BaseEventData( const float timeStamp = 0.0f );
-	virtual ~BaseEventData();
+	namespace Core
+	{
+		/**
+		 * @class BaseEventData
+		 * @brief A basic implementation of the IEventData interface.
+		 *
+		 * This class is a basic <b>non-concrete</b> implementation of the IEvenData interface.
+		 * Any game events you wish to create, can inheirt from this class and implement the pure virtual
+		 * functions to create a concrete implementation that can be used with the EventManager.
+		 *
+		 * @note This class is based off of the BaseEventData class form "Game Coding Complete: Third Edition" by Mike McShaffry.
+		 */
+		class OG_API BaseEventData : public OGFramework::Core::IEventData
+		{
+		public:
+			BaseEventData( const float timeStamp = 0.0f );
+			virtual ~BaseEventData();
 
-	// ACCESS
-	//
-	float GetTimeStamp( void ) const { return mTimeStamp; }
+			// ACCESS
+			//
+			float GetTimeStamp( void ) const { return mTimeStamp; }
 
-protected:
-	const float mTimeStamp;
-};
+		protected:
+			const float mTimeStamp;
+		};
+	}
+}
 
 #endif

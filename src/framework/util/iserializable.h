@@ -26,18 +26,25 @@
 #include <framework/util/ogdef.h>
 #include <framework/util/ogtypes.h>
 
-/**
- * @class ISerializable
- * @brief A interface class used to reperesent serializable objects.
- */
-class ISerializable
+namespace OGFramework
 {
-public:
-	ISerializable() { };
-	virtual ~ISerializable() { };
+	namespace Util
+	{
+		/**
+		 * @class ISerializable
+		 * @brief A interface class used to reperesent serializable objects.
+		 */
 
-	virtual void Serialize( ByteBuffer& archv ) const = 0;
-	virtual void Deserialize( ByteBuffer& archv ) const = 0;
-};
+		class ISerializable
+		{
+		public:
+			ISerializable() { };
+			virtual ~ISerializable() { };
+
+			virtual void Serialize( OGFramework::Util::ByteBuffer& archv ) const = 0;
+			virtual void Deserialize( OGFramework::Util::ByteBuffer& archv ) const = 0;
+		};
+	}
+}
 
 #endif

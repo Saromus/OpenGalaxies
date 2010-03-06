@@ -19,6 +19,8 @@
 #include "crctable.h"
 #include "hashedstring.h"
 
+using namespace OGFramework::Util;
+
 HashedString::HashedString( )
 : mString( "NULL" ), mHashValue( 0 )
 {

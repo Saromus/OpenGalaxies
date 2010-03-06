@@ -34,7 +34,8 @@ class TestEventManager : public CppUnit::TestFixture
 	CPPUNIT_TEST( testTrigger );
 	CPPUNIT_TEST( testAbortEvent );
 	CPPUNIT_TEST( testEventSerialization );
-	CPPUNIT_TEST_SUITE_END( TestEventManager );
+	CPPUNIT_TEST_SUITE_END();
+
 public:
 	TestEventManager( void ) : mEventManager( "TestEventManager" ) { }
 	~TestEventManager( void ) { }
@@ -48,10 +49,10 @@ public:
 	void testEventSerialization( void );
 protected:
 private:
-	void HandleEvent( const IEventData& event );
+	void HandleEvent( const OGFramework::Core::IEventData& event );
 
-	EventManager mEventManager;
-	ByteBuffer buffer;
+	OGFramework::Core::EventManager mEventManager;
+	OGFramework::Util::ByteBuffer buffer;
 };
 
 #endif

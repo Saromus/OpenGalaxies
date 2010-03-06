@@ -19,6 +19,8 @@
 #include <iostream>
 #include "testprocess.h"
 
+using namespace OGFramework::Core;
+
 void
 TestProcess::Initialize( void )
 {

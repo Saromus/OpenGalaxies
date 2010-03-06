@@ -46,7 +46,7 @@ public:
 
 protected:
 private:
-	ByteBuffer			mBuffer;
+	OGFramework::Util::ByteBuffer			mBuffer;
 };
 
 

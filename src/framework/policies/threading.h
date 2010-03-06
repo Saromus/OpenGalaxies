@@ -28,81 +28,84 @@
 #include <framework/util/ogdef.h>
 #include <framework/util/ogtypes.h>
 
-/**
- * @class SingleThreaded
- * @brief Stub Locking Policy
- */
-template< class T >
-class OG_API SingleThreaded
+namespace OGFramework
 {
-public:
-	class Lock : boost::noncopyable
+	namespace Policies
 	{
-		Lock( SingleThreaded<T>& obj ) { }
-		~Lock() { }
-	};
-};
+		/**
+		 * @class SingleThreaded
+		 * @brief Stub Locking Policy
+		 */
+		template< class T >
+		class OG_API SingleThreaded
+		{
+		public:
+			class Lock : boost::noncopyable
+			{
+				Lock( SingleThreaded<T>& obj ) { }
+				~Lock() { }
+			};
+		};
 
-/**
- * @class ClassLevelLockable
- * @brief Class-Level Locking Policy
- *
- * Provides threading synchronization protection on a class-level. This means that the mutex
- * supplied inside the lock is on a class-level (one instance per class).
- * 
- * These should be used on widely used fast-classes to conserve space.
- * 
- * A moderate performance hit may occure depending on whether or not another thread is trying to access a different
- * object of the same class type. Under this circumstance, even though the each object is a seperate instance, it will still lock
- * because they share the same mutex instance.
- * 
- * Hense it is important to only use this type of lock on classes that perform fast operations. A size hit in most circumstances
- * is more acceptable then a performance hit. If this is the case, use ObjectLevelLockable.
- */
-template< class T >
-class OG_API ClassLevelLockable : private boost::noncopyable
-{
-public:
-	class Lock : private boost::noncopyable
-	{
-	public:
-		Lock() { mLockable.lock(); }
-		Lock( ClassLevelLockable<T>& obj ) { mLockable.unlock(); }
-		~Lock() { }
+		/**
+		 * @class ClassLevelLockable
+		 * @brief Class-Level Locking Policy
+		 *
+		 * Provides threading synchronization protection on a class-level. This means that the mutex
+		 * supplied inside the lock is on a class-level (one instance per class).
+		 *
+		 * These should be used on widely used fast-classes to conserve space.
+		 *
+		 * A moderate performance hit may occure depending on whether or not another thread is trying to access a different
+		 * object of the same class type. Under this circumstance, even though the each object is a seperate instance, it will still lock
+		 * because they share the same mutex instance.
+		 *
+		 * Hense it is important to only use this type of lock on classes that perform fast operations. A size hit in most circumstances
+		 * is more acceptable then a performance hit. If this is the case, use ObjectLevelLockable.
+		 */
+		template< class T >
+		class OG_API ClassLevelLockable : private boost::noncopyable
+		{
+		public:
+			class Lock : private boost::noncopyable
+			{
+			public:
+				Lock() { mLockable.lock(); }
+				Lock( ClassLevelLockable<T>& obj ) { mLockable.unlock(); }
+				~Lock() { }
 
-	private:
-		static boost::mutex			mLockable;
-	};
+			private:
+				static boost::mutex			mLockable;
+			};
+		};
 
-};
+		/**
+		 * @class ObjectLevelLockable
+		 * @brief Object-Level Locking Policy
+		 *
+		 * Provides threading synchronization protection on an object-level. This means that the mutex
+		 * supplied inside the lock is on an object-level (one instance per object).
+		 */
+		template< class T >
+		class OG_API ObjectLevelLockable : private boost::noncopyable
+		{
+		public:
+			class Lock : private boost::noncopyable
+			{
+			public:
+				friend class ObjectLevelLockable;
 
-/**
- * @class ObjectLevelLockable
- * @brief Object-Level Locking Policy
- *
- * Provides threading synchronization protection on an object-level. This means that the mutex
- * supplied inside the lock is on an object-level (one instance per object).
- */
-template< class T >
-class OG_API ObjectLevelLockable : private boost::noncopyable
-{
-public:
-	class Lock : private boost::noncopyable
-	{
-	public:
-		friend class ObjectLevelLockable;
+				Lock( ObjectLevelLockable<T>& obj ) : mLockableRef( obj.mLockable ) {  mLockableRef.lock(); }
+				~Lock() { mLockableRef.unlock(); }
 
-		Lock( ObjectLevelLockable<T>& obj ) : mLockableRef( obj.mLockable ) {  mLockableRef.lock(); }
-		~Lock() { mLockableRef.unlock(); }
+			private:
+				boost::mutex&			mLockableRef;
+			};
 
-	private:
-		boost::mutex&			mLockableRef;
-
-	};
-
-private:
-	boost::mutex				mLockable;
-};
-
+			private:
+			boost::mutex				mLockable;
+		};
+	}
+}
 
 #endif

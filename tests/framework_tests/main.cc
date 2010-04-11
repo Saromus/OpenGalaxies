@@ -29,7 +29,9 @@
 
 int main(int argc, char* argv[])
 {
-	OGFramework::Util::Timer::Timer();
+	OGFramework::Util::Timer timer;
+	timer.StartTimer();
+
 	OGFramework::Util::Logger logger( "TestLogger.log" );
 
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();

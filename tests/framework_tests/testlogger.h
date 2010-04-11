@@ -49,7 +49,6 @@ public:
 	
 protected:
 private:
-	OGFramework::Util::Timer timer;
 	OGFramework::Util::Logger logger;
 
 };

@@ -52,5 +52,4 @@ TestLogger::LoggerTest( void )
 	logger.Log( Logger::FATAL, "Testing Fatal Level." );
 
 	logger.Info( "Testing logger with loggerName." );
-
 }

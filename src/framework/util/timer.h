@@ -26,133 +26,121 @@
 
 // STL INCLUDES
 //
-#include <ctime>
+#include <time.h>
 
-//Saromus - TODO: Document methods.
 namespace OGFramework
 {
 	namespace Util
 	{
 		/**
 		 * @class Timer
+		 * @brief This timer class acts like a "stopwatch", returning elapsed seconds or milliseconds.
 		 *
-		 * @see http://forums.devarticles.com/c-c-help-52/basic-c-timer-172684.html
-		 * @see http://wiki.forum.nokia.com/index.php/CS001102_-_One-second_timer_implementation_using_Open_C%2B%2B
+		 * @see http://www.cplusplus.com/forum/beginner/317/
 		 */
 		class OG_API Timer
 		{
 		public:
-			Timer() : mStartTime(0), mStopTime(0), mIsReset(false), mIsRunning(false)
+
+			Timer() //: mStart(0), mEnd(0), mIsReset(true) mIsRunning(false)
 			{
-				StartTimer();
+				mIsReset = true;
+				mIsRunning = false;
+				mStart = 0;
+				mEnd = 0;
+				//StartTimer();
 			}
 
-			virtual ~Timer()
+			~Timer()
 			{
-				StopTimer();
+				//StopTimer();
 			}
 
-			virtual void StartTimer()
+			void StartTimer()
 			{
-				if (mIsRunning)
+				/*if ( mIsRunning )
+					return;*/
+
+				//else { }
+
+				if ( !mIsRunning )
 				{
-					return;
-				}
-				else if (mIsReset)
-				{
-					time(&mStartTime);
-				}
-				else
-				{
-					mStartTime = time(NULL);
+					if ( mIsReset )
+						mStart = (unsigned long) clock();
+					else
+						mStart -= mEnd - (unsigned long) clock();
+
 					mIsRunning = true;
 					mIsReset = false;
 				}
 			}
 
-			virtual void StopTimer()
+			void StopTimer()
 			{
-				if (mIsRunning)
+				if ( mIsRunning )
 				{
+					mEnd = (unsigned long) clock();
 					mIsRunning = false;
-					mStopTime = time(NULL);
-					//time(&mStopTime);
-					//mStopTime = time(&mStopTime);
 				}
 			}
 
-			/**
-			 * This will basically reset the timer to zero but a new timer will
-			 * not be started automatically after the timer is reset unless
-			 * 'bool restart' is true.
-			 * @param restart - Should timer be restarted once it has been reset (true/false)
+			/*
+			 * Resets the Timer to 0 and then starts it up again.
 			 */
-			virtual void RestartTimer(bool restart)
+			void ResetTimer()
 			{
-				if (mIsRunning)
-				{
+				bool wasRunning = mIsRunning;
+
+				if ( wasRunning )
 					StopTimer();
-					mIsReset = true;
-					mStartTime = mStopTime;
-					if (restart)
-					{
-						StartTimer();
-					}
-				}
+
+				mIsReset = true;
+				mStart = 0;
+				mEnd = 0;
+
+				if ( wasRunning )
+					StartTimer();
 			}
 
-			int Timer::getElapsedTime()
+			/*
+			 * Returns a time interval in seconds.
+			 */
+			unsigned long getElapsedTime()
 			{
-				if (mIsRunning)
-				{
-					time_t now = time(&now);
-
-					/**
-					 * Subtracts the start time and the current time to get the total
-					 * number of seconds elapsed since the start of the Timer.
-					 * @return - Total number of seconds elapsed in seconds.
-					 */
-					int elapsed = now - mStartTime;
-					return elapsed;
-				}
+				if ( mIsRunning )
+					return ((unsigned long) clock() - mStart) / CLOCKS_PER_SEC;
 				else
-				{
-					/**
-					 * Subtracts the start time and end time to get the total number
-					 * of seconds elapsed.
-					 * @return - Total number of seconds elapsed in seconds.
-					 */
-					int elapsed = mStopTime - mStartTime;
-					return elapsed;
-				}
+					return ( mEnd - mStart ) / CLOCKS_PER_SEC;
+			}
+
+			/*
+			 * Returns a time interval in milliseconds.
+			 */
+			unsigned long getElapsedMili()
+			{
+				if ( mIsRunning )
+					return ((unsigned long) clock() - mStart);
+				else
+					return mEnd - mStart;
 			}
 
 			bool IsRunning()
 			{
-				/**
-				 * If this returns true then the Timer is current running.
-				 * @return - Timer is running
-				 */
 				return mIsRunning;
 			}
 
-			bool IsReset()
+			bool IsTimeout( unsigned long seconds )	//bool IsOver( unsigned long seconds )
 			{
-				/**
-				 * If this returns true then the Timer has been reset.
-				 * @return - Timer has been reset.
-				 */
-				return mIsReset;
+				return seconds >= getElapsedTime();
 			}
 
 		protected:
 
 		private:
-			time_t mStartTime;
-			time_t mStopTime;
-
-			bool mIsRunning;
-			bool mIsReset;
+			bool			mIsReset;
+			bool			mIsRunning;
+			unsigned long	mStart;
+			unsigned long	mEnd;	//mEnd;
 
 		};
 	}

@@ -44,7 +44,7 @@ namespace OGFramework
 		 * @note This class is based off of the EventManager class form "Game Coding Complete: Third Edition" by Mike McShaffry.
 		 */
 
-		class OG_API EventManager : public OGFramework::Core::IEventManager, public OGFramework::Util::Singleton< OGFramework::Core::EventManager >
+		class OG_API EventManager : public OGFramework::Core::IEventManager, public OGFramework::Util::Singleton< EventManager >
 		{
 		public:
 			EventManager( std::string name );

@@ -72,6 +72,7 @@ namespace OGFramework
 			// OPERATIONS
 			//
 			void Detach( boost::shared_ptr<OGFramework::Core::Process> pProcess );
+
 		};
 	}
 }

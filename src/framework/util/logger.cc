@@ -29,30 +29,51 @@
 
 using namespace OGFramework::Util;
 
-Logger::Logger( const std::string& filename )
+std::ofstream Logger::gLogFile;
+
+Logger::Logger( const char* filename )
 {
-	logFile.open(filename.c_str());
+	OpenLogger( filename );
 }
 
-Logger::~Logger( void )
+Logger::~Logger()
 {
-	if (logFile.is_open())
-	{
-		logFile.flush();
-		logFile.close();
-	}
+	CloseLogger();
 }
 
-void Logger::Log( LogLevel ogLevel, const std::string& msg )
+void Logger::Log( LogLevel ogLevel, const char* msg )
 {
-	if (logFile.is_open())
+	if (gLogFile.is_open())
 	{
-		logFile << "(" << timer.getElapsedTime() << " s) " << toString(ogLevel) << " " << msg.c_str() << std::endl;
-		logFile.flush();
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(ogLevel) << " " << msg << std::endl;
+		gLogFile.flush();
 	}
 	else
+		sConsole.Error( "The log file is not open for some reason!" );
+}
+
+void Logger::Info( std::string msg )
+{
+	if (getLoggerName().empty() == false)
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << "[" << getLoggerName() << "] " << msg << std::endl;
+
+	else
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(INFO) << " " << msg << std::endl;
+}
+
+/*static*/
+void Logger::OpenLogger( const char* filename )
+{
+	gLogFile.open( filename );
+}
+
+/*static*/
+void Logger::CloseLogger()
+{
+	if (gLogFile.is_open())
 	{
-		sConsole.Error( "Log File is not open for some reason!" );
+		gLogFile.flush();
+		gLogFile.close();
 	}
 }
 
@@ -69,30 +90,31 @@ void Log::DebugString( std::string message )
 {
 	Lock(*this);
 #ifdef _DEBUG
-	mLogStream << "(" << timer.getElapsedTime() << " s) " << "[Debug]: " << message << std::endl;
+	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Debug] " << message << std::endl;
 #endif
 }
 
+/*
 void Log::Info( std::string message )
 {
 	Lock(*this);
-	mLogStream << "(" << timer.getElapsedTime() << " s) " << "[Info]: " << message << std::endl;
-}
+	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Info] " << message << std::endl;
+}*/
 
 void Log::Warning( std::string message )
 {
 	Lock(*this);
-	mLogStream << "(" << timer.getElapsedTime() << " s) " << "[Warning]: " << message << std::endl;
+	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Warning] " << message << std::endl;
 }
 
 void Log::Error( std::string message )
 {
 	Lock(*this);
-	mLogStream << "(" << timer.getElapsedTime() << " s) " << "[Error]: " << message << std::endl;
+	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Error] " << message << std::endl;
 }
 
 void Log::Fatal( std::string message )
 {
 	Lock(*this);
-	mLogStream << "(" << timer.getElapsedTime() << " s) " << "[Fatal]: " << message << std::endl;
+	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Fatal] " << message << std::endl;
 }

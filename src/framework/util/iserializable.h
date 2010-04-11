@@ -34,7 +34,6 @@ namespace OGFramework
 		 * @class ISerializable
 		 * @brief A interface class used to reperesent serializable objects.
 		 */
-
 		class ISerializable
 		{
 		public:

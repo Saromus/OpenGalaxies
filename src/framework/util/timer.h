@@ -25,6 +25,7 @@
 #include <framework/util/ogtypes.h>
 
 // STL INCLUDES
+//
 #include <ctime>
 
 //Saromus - TODO: Document methods.
@@ -34,6 +35,7 @@ namespace OGFramework
 	{
 		/**
 		 * @class Timer
+		 *
 		 * @see http://forums.devarticles.com/c-c-help-52/basic-c-timer-172684.html
 		 * @see http://wiki.forum.nokia.com/index.php/CS001102_-_One-second_timer_implementation_using_Open_C%2B%2B
 		 */
@@ -79,6 +81,12 @@ namespace OGFramework
 				}
 			}
 
+			/**
+			 * This will basically reset the timer to zero but a new timer will
+			 * not be started automatically after the timer is reset unless
+			 * 'bool restart' is true.
+			 * @param restart - Should timer be restarted once it has been reset (true/false)
+			 */
 			virtual void RestartTimer(bool restart)
 			{
 				if (mIsRunning)
@@ -99,6 +107,11 @@ namespace OGFramework
 				{
 					time_t now = time(&now);
 
+					/**
+					 * Subtracts the start time and the current time to get the total
+					 * number of seconds elapsed since the start of the Timer.
+					 * @return - Total number of seconds elapsed in seconds.
+					 */
 					int elapsed = now - mStartTime;
 					return elapsed;
 				}
@@ -107,6 +120,7 @@ namespace OGFramework
 					/**
 					 * Subtracts the start time and end time to get the total number
 					 * of seconds elapsed.
+					 * @return - Total number of seconds elapsed in seconds.
 					 */
 					int elapsed = mStopTime - mStartTime;
 					return elapsed;
@@ -115,11 +129,19 @@ namespace OGFramework
 
 			bool IsRunning()
 			{
+				/**
+				 * If this returns true then the Timer is current running.
+				 * @return - Timer is running
+				 */
 				return mIsRunning;
 			}
 
 			bool IsReset()
 			{
+				/**
+				 * If this returns true then the Timer has been reset.
+				 * @return - Timer has been reset.
+				 */
 				return mIsReset;
 			}
 

@@ -34,8 +34,7 @@
 //
 #include <ostream>
 
-//
-// Types
+// TYPEDEF
 //
 typedef OGFramework::Util::HashedString EventType;
 

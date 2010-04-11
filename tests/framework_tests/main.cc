@@ -16,15 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// CPPUNIT INCLUDES
+//
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 
+// PROJECT INCLUDES
+//
 #include <framework/util/timer.h>
+#include <framework/util/logger.h>
 
 int main(int argc, char* argv[])
 {
 	OGFramework::Util::Timer::Timer();
+	OGFramework::Util::Logger logger( "TestLogger.log" );
 
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
 	CPPUNIT_NS::TextUi::TestRunner runner;

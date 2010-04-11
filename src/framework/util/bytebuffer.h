@@ -23,7 +23,6 @@
 //
 #include <boost/shared_ptr.hpp>
 
-
 // PROJECT INCLUDES
 //
 #include <framework/util/endian.h>
@@ -36,13 +35,12 @@
 #include <string.h>
 #include <vector>
 
-// EXCEPTIONS
-//
-
 namespace OGFramework
 {
 	namespace Util	//namespace Exception
 	{
+		// EXCEPTIONS
+		//
 		class ByteBufferOverflowException : public std::exception
 		{
 		public:
@@ -52,7 +50,7 @@ namespace OGFramework
 
 		class ByteBufferOverrunException : public std::exception
 		{
-			public:
+		public:
 			ByteBufferOverrunException() { }
 			virtual ~ByteBufferOverrunException() throw() { }
 		};

@@ -47,6 +47,7 @@ public:
 	void testTrigger( void );
 	void testAbortEvent( void );
 	void testEventSerialization( void );
+
 protected:
 private:
 	void HandleEvent( const OGFramework::Core::IEventData& event );

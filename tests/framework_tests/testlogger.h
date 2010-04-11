@@ -25,6 +25,7 @@
 
 // PROJECT INCLUDES
 #include <framework/util/logger.h>
+#include <framework/util/timer.h>
 
 // STL INCLUDES
 #include <iostream>
@@ -48,6 +49,8 @@ public:
 	
 protected:
 private:
+	OGFramework::Util::Timer timer;
+	OGFramework::Util::Logger logger;
 
 };
 

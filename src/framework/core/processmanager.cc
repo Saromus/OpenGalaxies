@@ -50,11 +50,12 @@ ProcessManager::Update(int deltaMilliseconds)
 	if( mProcesses.size() <= 0)
 		return;
 
-	/* HACK
+	/**
+	 * HACK
 	 * As you may have noticed, we need to manually increment the iterator or else it will become
 	 * invalid if a process is declared dead.
 	 *
-	 * There should be serveral standard ways of getting round this while retaining the normal iterator
+	 * There should be serveral standard ways of getting around this while retaining the normal iterator
 	 * increment statement in the for statement.
 	 */
 	for(ProcessList::iterator i = mProcesses.begin(); i != mProcesses.end(); )

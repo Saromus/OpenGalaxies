@@ -103,7 +103,7 @@ namespace OGFramework
 			};
 
 			private:
-			boost::mutex				mLockable;
+				boost::mutex				mLockable;
 		};
 	}
 }

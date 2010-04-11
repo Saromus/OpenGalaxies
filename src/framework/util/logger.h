@@ -31,34 +31,78 @@
 #include <iostream>
 #include <fstream>
 #include <ostream>
+#include <string.h>
 
 namespace OGFramework
 {
 	namespace Util
 	{
-		//Saromus - TODO: Dead1ock wants this moved to Logger class under the public section. Too lazy to fix all the errors this causes atm.
-		enum LogLevel
-		{
-			INFO,
-#ifdef _DEBUG
-			DEBUG,
-#endif
-			WARNING,
-			ERROR,
-			FATAL
-		};
-
+		/**
+		 * @class Logger
+		 * @brief A logging system that will log a message
+		 * to a specific file.
+		 *
+		 * @note The basic idea of design for this class is based
+		 * on the file logger (logger.h) from SWGEmu. I used that
+		 * file as a base for how this logger should work/function.
+		 */
 		class OG_API Logger : public OGFramework::Policies::ObjectLevelLockable< Logger >
 		{
 		public:
 
-			Logger( const std::string& filename );
-			virtual ~Logger( void );
+			enum LogLevel
+			{
+				INFO,
+#ifdef _DEBUG
+				DEBUG,
+#endif
+				WARNING,
+				ERROR,
+				FATAL
+			};
+
+			Logger() { }
+			Logger( const char* filename );
+			~Logger();
 
 			// OPERATIONS
 			//
-			virtual void Log( LogLevel ogLevel, const std::string& msg );
 
+			/**
+			 * Writes a message to the log file that is open.
+			 * @param ogLevel The Level to log the message as.
+			 * @param msg The message to be logged.
+			 */
+			void Log( LogLevel ogLevel, const char* msg );
+			virtual void Info( std::string msg );
+
+			/**
+			 * Opens a file for logging. This file will be
+			 * globally accessable to all resources that
+			 * call #include <framework/util/logger.h>.
+			 * @param filename The name of the file to be created.
+			 */
+			static void OpenLogger( const char* filename );
+			static void CloseLogger();
+
+			//void OpenFileLogger( const char* filename );
+			//void CloseFileLogger();
+
+			// ACCESS
+			//
+			/**
+			 * Sets the name of the Logger. Will only show the log
+			 * name when you use the INFO Log Level, to log server
+			 * operations.
+			 * @param loggerName The name to identify logger.
+			 * @note Should be named after the file/service its called in usually. (ie. ZoneServer, LoginServer, PlayerObject, etc.)
+			 * @note Example LoggerName output: [ZoneServer]
+			 */
+			void setLoggerName(const std::string& logName)			{ mLoggerName = logName; }
+			std::string& getLoggerName()							{ return mLoggerName; }
+
+			// CONVERSION
+			//
 			/**
 			 * Converts a LogLevel to a string representation.
 			 */
@@ -70,13 +114,11 @@ namespace OGFramework
 				case INFO:
 					prefix = "[Info]";
 					break;
-
 #ifdef _DEBUG
 				case DEBUG:
 					prefix = "[Debug]";
 					break;
 #endif
-
 				case WARNING:
 					prefix = "[Warning]";
 					break;
@@ -95,11 +137,12 @@ namespace OGFramework
 		protected:
 
 		private:
-			std::ofstream				logFile;
-			OGFramework::Util::Timer	timer;
+			OGFramework::Util::Timer	mTimer;
+			std::string					mLoggerName;
+			static std::ofstream		gLogFile;
+			//std::ofstream				mLogFile;
 
 		}; // logger
-
 
 		/**
 		 * @class Log
@@ -117,20 +160,21 @@ namespace OGFramework
 
 			// OPERATIONS
 			//
-			virtual void Info( std::string message );
 			virtual void DebugString( std::string message );
+			//virtual void Info( std::string message );
 			virtual void Warning( std::string message );
 			virtual void Error( std::string message );
 			virtual void Fatal( std::string message );
 
 		protected:
-			std::ostream& mLogStream;
+			std::ostream&			 	mLogStream;
 
 		private:
-			OGFramework::Util::Timer	timer;
+			OGFramework::Util::Timer	mTimer;
 
 		}; // log
 	} // util
 } // ogframework
+
 
 #endif /* LOGGER_H_ */

@@ -40,7 +40,6 @@ namespace OGFramework
 		 * @class Singleton
 		 * @brief A template class used to create single-instance global classes.
 		 */
-
 		class Singleton
 		{
 		public:

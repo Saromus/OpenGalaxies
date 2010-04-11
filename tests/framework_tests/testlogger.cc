@@ -22,10 +22,6 @@
 #include <framework/util/logger.h>
 #include <framework/util/globalconsole.h>
 
-// STL INCLUDES
-//
-#include <iostream>
-
 using namespace OGFramework::Util;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLogger );
@@ -43,20 +39,18 @@ TestLogger::tearDown( void )
 void 
 TestLogger::LoggerTest( void )
 {
-	//std::cout < "\n" << std::endl; // new line so first DebugString() isn't on the same line as beginning ellipsis.
-	//sConsole.DebugString( "Opening Log File." );
-	Logger logger = /*new*/ Logger( "TestLogger.log" );
-	//sConsole.DebugString( "'TestLogger.log' successfully opened." );
+	std::cout << "\n" << std::endl;
 
-	//sConsole.DebugString( "Writing tests to Log" );
+	logger.Info( "Testing logger without loggerName." );
 
-	logger.Log( INFO, "Testing Info Level." );
-	logger.Log( DEBUG, "Testing Debug Level." );
-	logger.Log( WARNING, "Testing Warning Level." );
-	logger.Log( ERROR, "Testing Error Level." );
-	logger.Log( FATAL, "Testing Fatal Level." );
+	logger.setLoggerName( "TestLogger" );
 
-	//sConsole.DebugString( "Finished logging. (delete logger)" );
+	logger.Log( Logger::INFO, "Testing Info Level." );
+	logger.Log( Logger::DEBUG, "Testing Debug Level." );
+	logger.Log( Logger::WARNING, "Testing Warning Level." );
+	logger.Log( Logger::ERROR, "Testing Error Level." );
+	logger.Log( Logger::FATAL, "Testing Fatal Level." );
 
-	//delete logger;
+	logger.Info( "Testing logger with loggerName." );
+
 }

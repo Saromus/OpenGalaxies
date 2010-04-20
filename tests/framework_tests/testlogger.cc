@@ -41,15 +41,30 @@ TestLogger::LoggerTest( void )
 {
 	std::cout << "\n" << std::endl;
 
+	//print to console & file.
+	logger.setLogger(true,true);
 	logger.Info( "Testing logger without loggerName." );
 
-	logger.setLoggerName( "TestLogger" );
+	//print to console only.
+	logger.setLogger(true,false);
+	logger.Info( "Testing Info Level." );
+	logger.Debug( "Testing Debug Level." );
+	logger.Warning( "Testing Warning Level." );
+	logger.Error( "Testing Error Level." );
+	logger.Fatal( "Testing Fatal Level." );
 
-	logger.Log( Logger::INFO, "Testing Info Level." );
-	logger.Log( Logger::DEBUG, "Testing Debug Level." );
-	logger.Log( Logger::WARNING, "Testing Warning Level." );
-	logger.Log( Logger::ERROR, "Testing Error Level." );
-	logger.Log( Logger::FATAL, "Testing Fatal Level." );
+	//print to file only
+	logger.setLogger(false,true);
+	logger.setLoggerTag( "TestLogger" );
 
-	logger.Info( "Testing logger with loggerName." );
+	logger.Info( "Testing Info Level." );
+	logger.Debug( "Testing Debug Level." );
+	logger.Warning( "Testing Warning Level." );
+	logger.Error( "Testing Error Level." );
+	logger.Fatal( "Testing Fatal Level." );
+
+	//print to console & file.
+	logger.setLogger(true,true);
+
+	logger.Info( "Testing logger with loggerName. logs to file too." );
 }

@@ -30,7 +30,7 @@ template<>
 GlobalConsole* Singleton< GlobalConsole >::msSingleInstance = new GlobalConsole();
 
 GlobalConsole::GlobalConsole()
-: Log( std::cout )
+//: Log( std::cout )
 {
 }
 

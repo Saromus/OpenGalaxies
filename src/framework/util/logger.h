@@ -33,6 +33,8 @@
 #include <ostream>
 #include <string.h>
 
+//extern Logger logger;
+
 namespace OGFramework
 {
 	namespace Util
@@ -74,7 +76,12 @@ namespace OGFramework
 			 * @param msg The message to be logged.
 			 */
 			void Log( LogLevel ogLevel, const char* msg );
-			virtual void Info( std::string msg );
+
+			virtual void Info( std::string msg/*, bool doLogging = false*/ );
+			virtual void Debug( std::string msg );
+			virtual void Warning( std::string msg );
+			virtual void Error( std::string msg );
+			virtual void Fatal( std::string msg );
 
 			/**
 			 * Opens a file for logging. This file will be
@@ -82,24 +89,31 @@ namespace OGFramework
 			 * call #include <framework/util/logger.h>.
 			 * @param filename The name of the file to be created.
 			 */
-			static void OpenLogger( const char* filename );
-			static void CloseLogger();
+			static void OpenGlobalLogger( const char* filename );
+			static void CloseGlobalLogger();
 
-			//void OpenFileLogger( const char* filename );
-			//void CloseFileLogger();
+			void setLogger( bool consoleOutput, bool fileOutput );
 
 			// ACCESS
 			//
 			/**
-			 * Sets the name of the Logger. Will only show the log
-			 * name when you use the INFO Log Level, to log server
-			 * operations.
-			 * @param loggerName The name to identify logger.
-			 * @note Should be named after the file/service its called in usually. (ie. ZoneServer, LoginServer, PlayerObject, etc.)
-			 * @note Example LoggerName output: [ZoneServer]
+			 * Adds an additional string prepended to each message
+			 * substituting '[Info]' with the prepended tag.
+			 * (useful for identifying services or child processes.
+			 * It will only be used for 'logger.Info()'.
+			 * A copy of tag is saved.
+			 * @param loggerTag The string to be prepended to each message.
+			 * @example setLoggerTag("ZoneServer");
 			 */
-			void setLoggerName(const std::string& logName)			{ mLoggerName = logName; }
-			std::string& getLoggerName()							{ return mLoggerName; }
+			inline void setLoggerTag(const std::string& loggerTag)
+			{
+				mLoggerTag = "[" + loggerTag + "] ";
+			}
+
+			inline std::string& getLoggerTag()
+			{
+				return mLoggerTag;
+			}
 
 			// CONVERSION
 			//
@@ -112,23 +126,23 @@ namespace OGFramework
 				switch ( ll )
 				{
 				case INFO:
-					prefix = "[Info]";
+					prefix = "[Info] ";
 					break;
 #ifdef _DEBUG
 				case DEBUG:
-					prefix = "[Debug]";
+					prefix = "[Debug] ";
 					break;
 #endif
 				case WARNING:
-					prefix = "[Warning]";
+					prefix = "[Warning] ";
 					break;
 
 				case ERROR:
-					prefix = "[Error]";
+					prefix = "[Error] ";
 					break;
 
 				case FATAL:
-					prefix = "[Fatal]";
+					prefix = "[Fatal] ";
 					break;
 				}
 				return prefix;
@@ -138,9 +152,10 @@ namespace OGFramework
 
 		private:
 			OGFramework::Util::Timer	mTimer;
-			std::string					mLoggerName;
+			std::string					mLoggerTag;
+			bool						mFileOutput;
+			bool						mConsoleOutput;
 			static std::ofstream		gLogFile;
-			//std::ofstream				mLogFile;
 
 		}; // logger
 
@@ -148,31 +163,32 @@ namespace OGFramework
 		 * @class Log
 		 * @brief A simple string logging class.
 		 */
-		class Log : public OGFramework::Policies::ObjectLevelLockable< Log >
+	/*	class Log : public OGFramework::Policies::ObjectLevelLockable< Log >
 		{
 		public:
 			/**
-			 * @arg std::ostream& - A reference to the stream the information
+			 * @arg std::ostream& A reference to the stream the information
 			 * should be logged to.
-			 */
+			 *//*
 			Log( std::ostream &outputStream );
 			virtual ~Log();
 
 			// OPERATIONS
 			//
-			virtual void DebugString( std::string message );
-			//virtual void Info( std::string message );
-			virtual void Warning( std::string message );
-			virtual void Error( std::string message );
-			virtual void Fatal( std::string message );
+			//virtual void DebugString( std::string message );
+			//virtual void Info1( std::string message );
+			//virtual void Warning( std::string message );
+			//virtual void Error( std::string message );
+			//virtual void Fatal( std::string message );
 
 		protected:
 			std::ostream&			 	mLogStream;
 
 		private:
 			OGFramework::Util::Timer	mTimer;
+			OGFramework::Util::Logger	logger;
 
-		}; // log
+		}; // log*/
 	} // util
 } // ogframework
 

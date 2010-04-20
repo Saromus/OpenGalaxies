@@ -20,6 +20,7 @@
 //
 #include "logger.h"
 #include <framework/util/globalconsole.h>
+#include <framework/util/timer.h>
 
 // STL INCLUDES
 //
@@ -33,42 +34,23 @@ std::ofstream Logger::gLogFile;
 
 Logger::Logger( const char* filename )
 {
-	OpenLogger( filename );
+	//mLoggerTag = " ";
+	OpenGlobalLogger( filename );
 }
 
 Logger::~Logger()
 {
-	CloseLogger();
-}
-
-void Logger::Log( LogLevel ogLevel, const char* msg )
-{
-	if (gLogFile.is_open())
-	{
-		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(ogLevel) << " " << msg << std::endl;
-		gLogFile.flush();
-	}
-	else
-		sConsole.Error( "The log file is not open for some reason!" );
-}
-
-void Logger::Info( std::string msg )
-{
-	if (getLoggerName().empty() == false)
-		std::cout << "(" << mTimer.getElapsedTime() << " s) " << "[" << getLoggerName() << "] " << msg << std::endl;
-
-	else
-		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(INFO) << " " << msg << std::endl;
+	CloseGlobalLogger();
 }
 
 /*static*/
-void Logger::OpenLogger( const char* filename )
+void Logger::OpenGlobalLogger( const char* filename )
 {
 	gLogFile.open( filename );
 }
 
 /*static*/
-void Logger::CloseLogger()
+void Logger::CloseGlobalLogger()
 {
 	if (gLogFile.is_open())
 	{
@@ -77,6 +59,145 @@ void Logger::CloseLogger()
 	}
 }
 
+void Logger::setLogger( bool consoleOutput, bool fileOutput )
+{
+	mConsoleOutput = consoleOutput;
+	mFileOutput = fileOutput;
+}
+
+
+void Logger::Log( LogLevel ogLevel, const char* msg )
+{
+	if (gLogFile.is_open())
+	{
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(ogLevel) << msg << std::endl;
+		gLogFile.flush();
+	}
+	else
+		Error( "The log file is not open for some reason!" );
+}
+
+void Logger::Debug( std::string msg )
+{
+	//if (!gLogFile.is_open())
+		//Error( "The log file is not open for some reason!" );
+
+#ifdef _DEBUG
+	Lock(*this);
+
+	if ( mFileOutput && gLogFile.is_open() )
+	{
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(DEBUG) << msg << std::endl;
+		gLogFile.flush();
+	}
+
+	if ( mConsoleOutput )
+	{
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(DEBUG) << msg << std::endl;
+		std::cout.flush();
+	}
+#endif
+
+}
+
+void Logger::Info( std::string msg )
+{
+	//if (!gLogFile.is_open())
+		//Error( "The log file is not open for some reason!" );
+
+	Lock(*this);
+
+	if ( mFileOutput && gLogFile.is_open() )
+	{
+		if ( getLoggerTag().empty() == false )
+		{
+			gLogFile << "(" << mTimer.getElapsedTime() << " s) " << getLoggerTag() << msg << std::endl;
+			gLogFile.flush();
+		}
+		else
+		{
+			gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(INFO) << msg << std::endl;
+			gLogFile.flush();
+		}
+	}
+
+	if ( mConsoleOutput )
+	{
+
+		if (getLoggerTag().empty() == false )
+		{
+			std::cout << "(" << mTimer.getElapsedTime() << " s) " << getLoggerTag() << msg << std::endl;
+			std::cout.flush();
+		}
+		else
+		{
+			std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(INFO) << msg << std::endl;
+			std::cout.flush();
+		}
+	}
+}
+
+void Logger::Warning( std::string msg )
+{
+	//if (!gLogFile.is_open())
+		//Error( "The log file is not open for some reason!" );
+
+	Lock(*this);
+
+	if ( mFileOutput && gLogFile.is_open() )
+	{
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(WARNING) << msg << std::endl;
+		gLogFile.flush();
+	}
+
+	if ( mConsoleOutput )
+	{
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(WARNING) << msg << std::endl;
+		std::cout.flush();
+	}
+}
+
+void Logger::Error( std::string msg )
+{
+	//if (!gLogFile.is_open())
+		//Error( "The log file is not open for some reason!" );
+
+	Lock(*this);
+
+	if ( mFileOutput && gLogFile.is_open() )
+	{
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(ERROR) << msg << std::endl;
+		gLogFile.flush();
+	}
+
+	if ( mConsoleOutput )
+	{
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(ERROR) << msg << std::endl;
+		std::cout.flush();
+	}
+}
+
+void Logger::Fatal( std::string msg )
+{
+	//if (!gLogFile.is_open())
+		//Error( "The log file is not open for some reason!" );
+
+	Lock(*this);
+
+	if ( mFileOutput && gLogFile.is_open() )
+	{
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << " " << msg << std::endl;
+		gLogFile.flush();
+	}
+
+	if ( mConsoleOutput )
+	{
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << " " << msg << std::endl;
+		std::cout.flush();
+	}
+}
+
+/*
 Log::Log( std::ostream &outputStream )
 : mLogStream( outputStream )
 {
@@ -94,12 +215,16 @@ void Log::DebugString( std::string message )
 #endif
 }
 
-/*
-void Log::Info( std::string message )
+
+void Log::Info1( std::string message )
 {
 	Lock(*this);
-	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Info] " << message << std::endl;
-}*/
+	std::string tag;
+	tag = "[" + logger.getLoggerTag() + "] ";
+	//mLogStream << "(" << mTimer.getElapsedTime() << " s) " << tag << message << std::endl;
+	std::cout << "(" << mTimer.getElapsedTime() << " s) " << tag << message << std::endl;
+	//mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[" << logger.getLoggerTag() << "] " << message << std::endl;
+}
 
 void Log::Warning( std::string message )
 {
@@ -117,4 +242,4 @@ void Log::Fatal( std::string message )
 {
 	Lock(*this);
 	mLogStream << "(" << mTimer.getElapsedTime() << " s) " << "[Fatal] " << message << std::endl;
-}
+}*/

@@ -31,7 +31,7 @@ namespace OGFramework
 {
 	namespace Util
 	{
-		class OG_API GlobalConsole : public OGFramework::Util::Log, public OGFramework::Util::Singleton< GlobalConsole >
+		class OG_API GlobalConsole : /*public OGFramework::Util::Log,*/ public OGFramework::Util::Singleton< GlobalConsole >
 		{
 		public:
 			GlobalConsole();

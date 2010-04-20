@@ -186,13 +186,13 @@ void Logger::Fatal( std::string msg )
 
 	if ( mFileOutput && gLogFile.is_open() )
 	{
-		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << " " << msg << std::endl;
+		gLogFile << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << msg << std::endl;
 		gLogFile.flush();
 	}
 
 	if ( mConsoleOutput )
 	{
-		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << " " << msg << std::endl;
+		std::cout << "(" << mTimer.getElapsedTime() << " s) " << toString(FATAL) << msg << std::endl;
 		std::cout.flush();
 	}
 }

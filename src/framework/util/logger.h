@@ -33,8 +33,6 @@
 #include <ostream>
 #include <string.h>
 
-//extern Logger logger;
-
 namespace OGFramework
 {
 	namespace Util

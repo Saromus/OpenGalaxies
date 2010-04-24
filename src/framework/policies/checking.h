@@ -47,8 +47,8 @@ namespace OGFramework
 			class NullPointerException : public std::exception
 			{
 			public:
-				NullPointerException( void ) throw() { }
-				~NullPointerException( void ) throw() { }
+				NullPointerException( void ) { }
+				~NullPointerException( void ) { }
 			};
 
 			static inline void Check( T* ptr )
